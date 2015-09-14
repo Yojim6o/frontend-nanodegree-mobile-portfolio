@@ -7,9 +7,12 @@
     <meta name="author" content=" FILL ME IN ">
     <title>Cameron Pittman: Portfolio</title>
 
-    <!-- Hmm, what is the impact of web fonts on speed? Measure it... -->
-    <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">-->
+    <!-- Hmm, what is the impact of web fonts on speed? Measure it... 
 
+    After researching, I decided to remove the google font altogether.  It doesn't seem to add enough worthwhile aesthetic for its weight.-->
+    <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">-->
+    
+    <!--I tested inlining the CSS within the HTML and it seems to work much better this way.-->
     <style>
 
       html {
@@ -63,6 +66,7 @@
       }
 
     </style>
+    <!--I removed style.css and inlined stylesheet above.  Print.css was moved to the bottom of the body.-->
     <!--<link href="css/style.css" rel="stylesheet">-->
     <!--<link href="css/print.css" rel="stylesheet">-->
 
@@ -74,7 +78,7 @@
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
     </script>
-
+    <!--analytics.js was moved to the bottom of the HTML body-->
     <script async src="js/perfmatters.js"></script>
   </head>
 
@@ -120,6 +124,7 @@
     <footer>
       <p>&copy; Web Performance 2014 <span id="crp-stats"></span></p>
     </footer>
+    <!--print.css and analytics.js were moved here-->
     <link href="css/print.css" rel="stylesheet">
     <script src="http://www.google-analytics.com/analytics.js"></script>
   </body>

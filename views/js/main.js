@@ -429,6 +429,7 @@ var resizePizzas = function(size) {
 
     // TODO: change to 3 sizes? no more xl?
     // Changes the slider value to a percent width
+    // I created a var randomPizzas to remove as much work from the for loop, then resized the pizzas using percentages in a switch(size) as instructed.
     function sizeSwitcher (size) {
       switch(size) {
         case "1":
@@ -466,7 +467,7 @@ var resizePizzas = function(size) {
     }
 
     var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
-
+    //here is the foor loop that was causing forced synchronous layout.  var randomPizzas mitigates as much assignment from the for loop as possible.
     for (var i = 0; i < randomPizzas.length; i++) {
       randomPizzas[i].style.width = newWidth + "%";
     }
@@ -518,6 +519,7 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
+  // another loop causing forced synchronous layout.  var cachedScrollTop outside of the loop resolved the issue.
   var cachedScrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
@@ -541,6 +543,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  //this loop originally went through 200 pizzas.  This was lowered to 50.
   for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
