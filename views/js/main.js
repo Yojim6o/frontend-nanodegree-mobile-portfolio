@@ -1,3 +1,4 @@
+"use strict";
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
 jank-free at 60 frames per second.
@@ -406,13 +407,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -424,7 +425,7 @@ var resizePizzas = function(size) {
   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldwidth = elem.offsetWidth;
-    var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
+    var windowwidth = document.getElementById("randomPizzas").offsetWidth;
     var oldsize = oldwidth / windowwidth;
 
     // TODO: change to 3 sizes? no more xl?
@@ -454,21 +455,23 @@ var resizePizzas = function(size) {
 
     switch(size) {
       case "1":
-        newWidth = 25;
+        var newWidth = 25;
         break;
       case "2":
-        newWidth = 33.3;
+        var newWidth = 33.3;
         break;
       case "3":
-        newWidth = 50;
+        var newWidth = 50;
         break;
       default:
         console.log("bug in sizeSwitcher");
     }
 
     var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
+    var len = randomPizzas.length;
     //here is the foor loop that was causing forced synchronous layout.  var randomPizzas mitigates as much assignment from the for loop as possible.
-    for (var i = 0; i < randomPizzas.length; i++) {
+    //var len created so there's only one DOM call
+    for (var i = 0; i < len; i++) {
       randomPizzas[i].style.width = newWidth + "%";
     }
   }
@@ -484,9 +487,10 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
+var pizzasDiv = document.getElementById("randomPizzas");
+// var PizzasDiv taken out of for loop so it only makes one DOM call.
 // This for-loop actually creates and appends all of the pizzas when the page loads
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -518,10 +522,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
+  var len = items.length;
   // another loop causing forced synchronous layout.  var cachedScrollTop outside of the loop resolved the issue.
   var cachedScrollTop = document.body.scrollTop;
-  for (var i = 0; i < items.length; i++) {
+  for (var i = 0; i < len; i++) {
     var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
@@ -543,16 +548,19 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  //this loop originally went through 200 pizzas.  This was lowered to 50.
-  for (var i = 0; i < 50; i++) {
-    var elem = document.createElement('img');
+  //elem and movingPizzas taken out of for loop for efficiency
+  var elem;
+  var movingPizzas = document.getElementById('movingPizzas1');
+  //this loop originally went through 200 pizzas.  This was lowered to 48.
+  for (var i = 0; i < 48; i++) {
+    elem = document.createElement('img')
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    movingPizzas.appendChild(elem);
   }
   updatePositions();
 });
